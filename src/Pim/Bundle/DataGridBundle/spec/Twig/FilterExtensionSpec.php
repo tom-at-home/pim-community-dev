@@ -32,11 +32,6 @@ class FilterExtensionSpec extends ObjectBehavior
         $this->getName()->shouldReturn('pim_datagrid_filter_extension');
     }
 
-    function it_have_a_filter_label_function()
-    {
-        $this->getFunctions()->shouldHaveKey('filter_label');
-    }
-
     function it_throws_an_exception_when_i_try_to_get_the_label_of_an_unknown_filter(
         $manager,
         $configurator,

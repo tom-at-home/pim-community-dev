@@ -111,7 +111,7 @@ class ChoiceFilterSpec extends ObjectBehavior
     ) {
         $repository->findOneByCode('data_name_key')->willReturn($attribute);
 
-        $factory->create(AjaxChoiceFilterType::NAME, [], [
+        $factory->create(AjaxChoiceFilterType::class, [], [
             'csrf_protection'   => false,
             'choice_url'        => 'pim_ui_ajaxentity_list',
             'choice_url_params' => [

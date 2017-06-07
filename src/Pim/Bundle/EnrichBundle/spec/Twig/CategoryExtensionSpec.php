@@ -31,12 +31,12 @@ class CategoryExtensionSpec extends ObjectBehavior
     {
         $functions = $this->getFunctions();
         $functions->shouldHaveCount(6);
-        $functions->shouldHaveKey('children_response');
-        $functions->shouldHaveKey('children_tree_response');
-        $functions->shouldHaveKey('list_categories_response');
-        $functions->shouldHaveKey('list_trees_response');
-        $functions->shouldHaveKey('exceeds_products_limit_for_removal');
-        $functions->shouldHaveKey('get_products_limit_for_removal');
+        $functions[0]->getName()->shouldReturn('children_response');
+        $functions[1]->getName()->shouldReturn('children_tree_response');
+        $functions[2]->getName()->shouldReturn('list_categories_response');
+        $functions[3]->getName()->shouldReturn('list_trees_response');
+        $functions[4]->getName()->shouldReturn('exceeds_products_limit_for_removal');
+        $functions[5]->getName()->shouldReturn('get_products_limit_for_removal');
     }
 
     function it_formats_trees_with_products_count(
