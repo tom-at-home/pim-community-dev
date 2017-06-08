@@ -6,24 +6,25 @@ use Doctrine\ORM\EntityManager;
 use PhpSpec\ObjectBehavior;
 use Pim\Bundle\CatalogBundle\Entity\Category;
 use Pim\Bundle\CatalogBundle\Entity\CategoryTranslation;
-use Pim\Component\Catalog\Model\LocaleInterface;
+use Pim\Bundle\VersioningBundle\UpdateGuesser\TranslationsUpdateGuesser;
 use Pim\Bundle\VersioningBundle\UpdateGuesser\UpdateGuesserInterface;
+use Pim\Component\Catalog\Model\LocaleInterface;
 
 class TranslationsUpdateGuesserSpec extends ObjectBehavior
 {
-    function let(EntityManager $em)
+    function let()
     {
         $this->beConstructedWith(['stdClass']);
     }
 
     function it_is_an_update_guesser()
     {
-        $this->shouldImplement('Pim\Bundle\VersioningBundle\UpdateGuesser\UpdateGuesserInterface');
+        $this->shouldImplement(UpdateGuesserInterface::class);
     }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Pim\Bundle\VersioningBundle\UpdateGuesser\TranslationsUpdateGuesser');
+        $this->shouldHaveType(TranslationsUpdateGuesser::class);
     }
 
     function it_supports_update_action()
@@ -32,10 +33,16 @@ class TranslationsUpdateGuesserSpec extends ObjectBehavior
         $this->supportAction('foo')->shouldReturn(false);
     }
 
+    function it_supports_delete_action()
+    {
+        $this->supportAction(UpdateGuesserInterface::ACTION_DELETE)->shouldReturn(true);
+        $this->supportAction('bar')->shouldReturn(false);
+    }
+
     function it_guesses_translatable_entity_updates(
         Category $category,
         CategoryTranslation $translation,
-        $em
+        EntityManager $em
     ) {
         $translation->getForeignKey()->willReturn($category);
         $this->guessUpdates($em, $translation, UpdateGuesserInterface::ACTION_UPDATE_ENTITY)
@@ -46,7 +53,7 @@ class TranslationsUpdateGuesserSpec extends ObjectBehavior
             ->shouldReturn([$class]);
     }
 
-    function it_returns_no_pending_updates_if_not_given_abstract_translation($em)
+    function it_returns_no_pending_updates_if_not_given_abstract_translation(EntityManager $em)
     {
         $this->guessUpdates($em, new \stdClass(), UpdateGuesserInterface::ACTION_UPDATE_ENTITY)
             ->shouldReturn([]);
@@ -54,7 +61,7 @@ class TranslationsUpdateGuesserSpec extends ObjectBehavior
 
     function it_returns_no_pending_updates_if_not_given_versionable_class(
         CategoryTranslation $translation,
-        $em,
+        EntityManager $em,
         LocaleInterface $locale
     ) {
         $translation->getForeignKey()->willReturn($locale);

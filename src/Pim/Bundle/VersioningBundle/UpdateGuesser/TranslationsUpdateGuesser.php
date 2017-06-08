@@ -38,7 +38,7 @@ class TranslationsUpdateGuesser implements UpdateGuesserInterface
      */
     public function supportAction($action)
     {
-        return $action === UpdateGuesserInterface::ACTION_UPDATE_ENTITY;
+        return in_array($action, [UpdateGuesserInterface::ACTION_UPDATE_ENTITY, UpdateGuesserInterface::ACTION_DELETE]);
     }
 
     /**
